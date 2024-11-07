@@ -1,19 +1,24 @@
-// api/proxy.js
+// proxy.js (Vercel API)
+const https = require('https');
+
 module.exports = async (req, res) => {
-    const url = req.query.url;
+  const url = 'https://games.crazygames.com/en_US/autogun-heroes-izk/index.html?v=1.309';
+  
+  https.get(url, (externalRes) => {
+    let data = '';
 
-    if (!url) {
-        return res.status(400).json({ error: 'URL parameter is required' });
-    }
+    externalRes.on('data', chunk => {
+      data += chunk;
+    });
 
-    try {
-        const response = await fetch(url);
-        const data = await response.text();
+    externalRes.on('end', () => {
+      // এখানে আপনি HTML থেকে অতিরিক্ত কন্টেন্ট সরাতে পারেন
+      // উদাহরণস্বরূপ, যদি আপনি হেডার বা ফুটার সরাতে চান
+      data = data.replace(/<header[^>]*>.*?<\/header>/g, ''); // হেডার সরানোর উদাহরণ
+      data = data.replace(/<footer[^>]*>.*?<\/footer>/g, ''); // ফুটার সরানোর উদাহরণ
 
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Content-Type', 'text/html');
-        res.send(data);
-    } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch data' });
-    }
+      res.setHeader('Content-Type', 'text/html');
+      res.send(data);
+    });
+  });
 };
