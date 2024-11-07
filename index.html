@@ -1,39 +1,29 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>গেম ইমবেড</title>
+    <title>Load Game in Iframe</title>
     <style>
-        /* আইফ্রেম কনটেইনার যাতে পুরো স্ক্রীন জুড়ে থাকে */
-        .iframe-container {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-        }
-
-        iframe {
+        /* iframe and button er style customize korar jonno */
+        #gameFrame {
             width: 100%;
-            height: 100%;
+            height: 600px;
             border: none;
-            display: block;
+            display: none; /* Default bhabe iframe dekha jabe na */
         }
     </style>
 </head>
 <body>
+    <button onclick="loadGame()">Load Game</button>
+    <iframe id="gameFrame"></iframe>
 
-    <div class="iframe-container">
-        <iframe src="https://games.crazygames.com/en_US/autogun-heroes-izk/index.html?v=1.309" style="width: 100%; height: 100%;" frameborder="0"></iframe>
-
-
-
-
-    </div>
-
+    <script>
+        function loadGame() {
+            const iframe = document.getElementById("gameFrame");
+            iframe.src = "https://games.crazygames.com/en_US/autogun-heroes-izk/index.html?v=1.309";
+            iframe.style.display = "block"; // Button click korle iframe dekhabe
+        }
+    </script>
 </body>
 </html>
