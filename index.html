@@ -1,4 +1,23 @@
-document.getElementById("connectBtn").addEventListener("click", async function() {
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trust Wallet Connect</title>
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/sign-client@experimental"></script>
+</head>
+<body>
+  <h1>Trust Wallet কানেক্ট করুন</h1>
+  <button id="connectBtn">কানেক্ট করুন</button>
+  <div id="qrCodeContainer" style="display: none;">
+    <h2>QR কোড স্ক্যান করুন</h2>
+    <div id="qrCode"></div>
+  </div>
+  <div id="status" style="display: none;">
+    <h3>কানেক্টেড!</h3>
+  </div>
+  <script>
+    document.getElementById("connectBtn").addEventListener("click", async function() {
   try {
     // 1. SignClient ইনিশিয়ালাইজ করা
     const signClient = await SignClient.init({
@@ -31,3 +50,7 @@ document.getElementById("connectBtn").addEventListener("click", async function()
     console.error("Error during WalletConnect:", error);
   }
 });
+
+  </script>
+</body>
+</html>
