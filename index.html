@@ -1,29 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Load Game in Iframe</title>
-    <style>
-        /* iframe and button er style customize korar jonno */
-        #gameFrame {
-            width: 100%;
-            height: 600px;
-            border: none;
-            display: none; /* Default bhabe iframe dekha jabe na */
-        }
-    </style>
-</head>
-<body>
-    <button onclick="loadGame()">Load Game</button>
-    <iframe id="gameFrame"></iframe>
+document.getElementById("connectBtn").addEventListener("click", async function() {
+  try {
+    // 1. SignClient ইনিশিয়ালাইজ করা
+    const signClient = await SignClient.init({
+      projectId: "c109ebd211a0150bc7e145f58e146a75", // আপনার প্রকল্প ID
+    });
 
-    <script>
-        function loadGame() {
-            const iframe = document.getElementById("gameFrame");
-            iframe.src = "https://games.crazygames.com/en_US/autogun-heroes-izk/index.html?v=1.309";
-            iframe.style.display = "block"; // Button click korle iframe dekhabe
-        }
-    </script>
-</body>
-</html>
+    // 2. কানেকশন সেটিংস নির্ধারণ
+    await signClient.connect({
+      methods: ["eth_sendTransaction", "eth_sign"],  // সেশন অনুমতিগুলি
+      chains: ["eip155:1"], // চেইন নির্ধারণ (Ethereum Mainnet)
+    });
+
+    // 3. QR কোড মডাল প্রদর্শন করা
+    const uri = await signClient.getUri();
+    const qrCodeContainer = document.getElementById("qrCodeContainer");
+    qrCodeContainer.style.display = "block";
+    
+    // QR কোড পেস্ট করা
+    const qrCode = document.getElementById("qrCode");
+    qrCode.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(uri)}&size=200x200" alt="QR Code" />`;
+
+    // 4. সেশন অনুমোদন করা
+    await signClient.awaitSession();
+    
+    // 5. সেশন সফলভাবে কানেক্ট হওয়া
+    const status = document.getElementById("status");
+    status.style.display = "block";
+    qrCodeContainer.style.display = "none";
+  } catch (error) {
+    console.error("Error during WalletConnect:", error);
+  }
+});
